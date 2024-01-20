@@ -2,6 +2,7 @@ package com.tunghuy.bankapp.service.impl;
 
 import com.tunghuy.bankapp.dto.AccountInfo;
 import com.tunghuy.bankapp.dto.BankResponse;
+import com.tunghuy.bankapp.dto.EmailDetails;
 import com.tunghuy.bankapp.dto.UserRequest;
 import com.tunghuy.bankapp.entity.User;
 import com.tunghuy.bankapp.repository.UserRepository;
@@ -16,6 +17,10 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EmailService emailService;
+
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         /*
@@ -43,6 +48,15 @@ public class UserServiceImpl implements UserService{
                 .build();
 
         User saveUser = userRepository.save(newUser);
+        //Send email alert
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(saveUser.getEmail())
+                .subject("ACCOUNT CREATION")
+                .messageBody("Congratulation! Your account has been successfully created!.\nYour account details: \n" +
+                        "Account Name: " + saveUser.getFirstName() + " " + saveUser.getLastName() + " " +
+                        saveUser.getOtherName() + "\nAccountNumber: " + saveUser.getAccountNumber())
+                .build();
+        emailService.sendEmailAlert(emailDetails);
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS)
                 .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
