@@ -1,6 +1,7 @@
 package com.tunghuy.bankapp.controller;
 
 import com.tunghuy.bankapp.dto.BankResponse;
+import com.tunghuy.bankapp.dto.CreditDebitRequest;
 import com.tunghuy.bankapp.dto.EnquiryRequest;
 import com.tunghuy.bankapp.dto.UserRequest;
 import com.tunghuy.bankapp.service.impl.UserService;
@@ -25,5 +26,10 @@ public class UserController {
     @GetMapping("nameEnquiry")
     public String nameEnquiry(@RequestBody EnquiryRequest request){
         return userService.nameEnquiry(request);
+    }
+
+    @PostMapping("credit")
+    public BankResponse creditAccount(@RequestBody CreditDebitRequest request){
+        return userService.creditAccount(request);
     }
 }
