@@ -1,9 +1,6 @@
 package com.tunghuy.bankapp.service.impl;
 
-import com.tunghuy.bankapp.dto.BankResponse;
-import com.tunghuy.bankapp.dto.CreditDebitRequest;
-import com.tunghuy.bankapp.dto.EnquiryRequest;
-import com.tunghuy.bankapp.dto.UserRequest;
+import com.tunghuy.bankapp.dto.*;
 
 public interface UserService {
     BankResponse createAccount(UserRequest userRequest);
@@ -11,4 +8,5 @@ public interface UserService {
     String nameEnquiry(EnquiryRequest request);
     BankResponse creditAccount(CreditDebitRequest request);
     BankResponse debitAccount(CreditDebitRequest request);
+    BankResponse transfer(TransferRequest request);
 }
