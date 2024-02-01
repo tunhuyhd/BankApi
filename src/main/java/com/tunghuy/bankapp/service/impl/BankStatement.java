@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.tunghuy.bankapp.dto.EmailDetails;
 import com.tunghuy.bankapp.entity.Transaction;
 import com.tunghuy.bankapp.entity.User;
 import com.tunghuy.bankapp.repository.TransactionRepository;
@@ -27,6 +28,8 @@ public class BankStatement {
     private TransactionRepository transactionRepository;
 
     private UserRepository userRepository;
+
+    private EmailService emailService;
     private static final String FILE = "G:\\PDF\\MyStatement.pdf";
     public List<Transaction> generateStatement(String accountNumber, String startDate, String endDate) throws FileNotFoundException, DocumentException {
         LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
@@ -108,6 +111,14 @@ public class BankStatement {
         document.add(transactionsTable);
 
         document.close();
+
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(user.getEmail())
+                .subject("STATEMENT OF ACCOUNT")
+                .messageBody(" Kindly find your request account statement attached!")
+                .attachment(FILE)
+                .build();
+        emailService.sendEmailWithAttachment(emailDetails);
         return transactionList;
     }
 
